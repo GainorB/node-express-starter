@@ -1,13 +1,21 @@
 {
-  "name": "node-express-mvc",
+  "name": "express-starter",
   "version": "1.0.0",
-  "description": "Building a Node/Express app following MVC design pattern using PostgreSQL",
+  "description": "A boilerplate application used to scale applications faster. Using various node modules to build a solid foundation for any application.",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server"
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GainorB/node-express-starter.git"
   },
   "author": "Gainor Bostwick",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GainorB/node-express-starter/issues"
+  },
+  "homepage": "https://github.com/GainorB/node-express-starter#readme",
   "dependencies": {
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
