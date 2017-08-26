@@ -16,6 +16,7 @@ const session = require('express-session'); // HANDLE SESSIONS
 const passport = require('passport'); // HANDLE AUTH
 const flash = require('connect-flash'); // FLASH MESSAGES
 const mongoose = require('mongoose');
+const expressValidator = require('express-validator');
 
 // =============================================================
 // ESTABLISH CONNECTION WITH MONGO
@@ -52,6 +53,26 @@ app.use(function(req, res, next) {
   res.locals.messages = require('express-messages')(req, res);
   next();
 });
+
+// EXPRESS VALIDATOR MIDDLEWARE
+app.use(
+  expressValidator({
+    errorFormatter: function(param, msg, value) {
+      var namespace = param.split('.'),
+        root = namespace.shift(),
+        formParam = root;
+
+      while (namespace.length) {
+        formParam += '[' + namespace.shift() + ']';
+      }
+      return {
+        param: formParam,
+        msg: msg,
+        value: value
+      };
+    }
+  })
+);
 
 // =============================================================
 // POSTGRESQL SESSION STORE
