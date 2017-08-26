@@ -4,7 +4,9 @@
   "description": "A boilerplate application used to scale applications faster. Using various node modules to build a solid foundation for any application.",
   "main": "server.js",
   "scripts": {
-    "test": "npm run test"
+    "start": "node server",
+    "dev": "nodemon server",
+    "test": "NODE_ENV=test nodemon --exec 'mocha --recursive -R min'"
   },
   "repository": {
     "type": "git",
@@ -17,15 +19,21 @@
   },
   "homepage": "https://github.com/GainorB/node-express-starter#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "dotenv": "^4.0.0",
     "ejs": "^2.5.6",
     "express": "^4.15.3",
-    "pg-promise": "^6.3.5"
+    "jsonwebtoken": "^7.4.3",
+    "mocha": "^3.5.0",
+    "mongoose": "^4.11.8",
+    "morgan": "^1.8.2",
+    "passport-jwt": "^3.0.0",
+    "pg-promise": "^6.3.5",
+    "supertest": "^3.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0",
-    "morgan": "^1.8.2"
+    "nodemon": "^1.11.0"
   }
 }
