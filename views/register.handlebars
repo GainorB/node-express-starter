@@ -1,0 +1,45 @@
+<div class="register-form-outline">
+  <h1 class="formHeader">Register an account</h1>
+  <form class="container" id="needs-validation" method="POST" action="/auth/register" novalidate>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" class="form-control" name="username" id="username" aria-describedby="username" required>
+      <div class="invalid-feedback">
+        Please provide a username.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="email">Email address</label>
+      <input type="email" class="form-control" name="email" id="email" aria-describedby="email" required>
+      <div class="invalid-feedback">
+        Please provide a email address.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" name="password" id="password" aria-describedby="password" required>
+      <div class="invalid-feedback">
+        Please provide a password.
+      </div>
+    </div>
+    <div class="registerAnAccount"><a href="/auth/login">Log into Account</a></div>
+    <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button> <button type="reset" class="btn btn-danger btn-lg btn-block">Reset</button>
+  </form>
+</div>
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function () {
+    "use strict";
+    window.addEventListener("load", function () {
+      var form = document.getElementById("needs-validation");
+      form.addEventListener("submit", function (event) {
+        if (form.checkValidity() == false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add("was-validated");
+      }, false);
+    }, false);
+  }());
+
+</script>

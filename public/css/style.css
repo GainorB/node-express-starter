@@ -1,0 +1,45 @@
+body {
+  background: #f4f7f6;
+  font-family: 'Open Sans', sans-serif;
+}
+
+#needs-validation {
+  padding: 5%;
+}
+
+.register-form-outline {
+  border-radius: 10px;
+  background: #eeeff1;
+  width: 40%;
+  margin: auto;
+  margin-top: 50px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2);
+}
+
+.registerAnAccount {
+  text-align: center;
+  margin: 10px;
+}
+
+.formHeader {
+  text-align: center;
+  padding: 10px;
+  font-size: 35px;
+  margin-bottom: -20px;
+}
+
+.socialHeader {
+  text-align: center;
+  padding: 10px;
+  font-size: 35px;
+}
+
+.socialmedia {
+  width: 30%;
+  margin: auto;
+  margin-top: 2%;
+}
+
+.fa {
+  color: white;
+}

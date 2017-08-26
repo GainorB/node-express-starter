@@ -1,0 +1,50 @@
+<div class="register-form-outline">
+  <h1 class="formHeader">Login</h1>
+  <form class="container" id="needs-validation" method="POST" action="/auth/login" novalidate>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" class="form-control" name="username" id="username" aria-describedby="username" required>
+      <div class="invalid-feedback">
+        Please provide a username.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" name="password" id="password" aria-describedby="password" required>
+      <div class="invalid-feedback">
+        Please provide a password.
+      </div>
+    </div>
+    <div class="registerAnAccount"><a href="/auth/register">Register an Account</a></div>
+    <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button> <button type="reset" class="btn btn-danger btn-lg btn-block">Reset</button>
+  </form>
+</div>
+<div class="socialmedia">
+  <h1 class="socialHeader">or</h1>
+  <a class="btn btn-block btn-social btn-twitter" href="/auth/twitter">
+    <span class="fa fa-twitter"></span> Sign in with Twitter
+  </a>
+  <a class="btn btn-block btn-social btn-facebook" href="/auth/facebook">
+    <span class="fa fa-facebook"></span> Sign in with Facebook
+  </a>
+  <a class="btn btn-block btn-social btn-google" href="/auth/google">
+    <span class="fa fa-google"></span> Sign in with Google
+  </a>
+</div>
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function () {
+    "use strict";
+    window.addEventListener("load", function () {
+      var form = document.getElementById("needs-validation");
+      form.addEventListener("submit", function (event) {
+        if (form.checkValidity() == false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add("was-validated");
+      }, false);
+    }, false);
+  }());
+
+</script>

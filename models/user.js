@@ -15,15 +15,15 @@ User.findById = (id, callback) => {
   });
 };
 
-// CREATE A USER
+// CREATE A LOCAL USER
 User.create = user => {
   return db.one(
     `
         INSERT INTO users
-        (id, token, email, name)
-        VALUES ($1, $2, $3, $4) RETURNING *
+        (username, password, email)
+        VALUES ($1, $2, $3) RETURNING *
     `,
-    [user.id, user.token, user.email, user.name]
+    [user.username, user.password, user.email]
   );
 };
 

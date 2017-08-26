@@ -1,4 +1,5 @@
 const AuthController = require('../controllers/authController');
+const ValidateUser = require('../services/validateUser');
 const passport = require('passport');
 
 module.exports = app => {
@@ -14,7 +15,7 @@ module.exports = app => {
   app.get(
     '/google/oauth2callback',
     passport.authenticate('google', {
-      successRedirect: '/',
+      successRedirect: '/dashboard',
       failureRedirect: '/auth/invalid'
     })
   );
@@ -23,7 +24,7 @@ module.exports = app => {
   app.get(
     '/auth/facebook/callback',
     passport.authenticate('facebook', {
-      successRedirect: '/',
+      successRedirect: '/dashboard',
       failureRedirect: '/auth/invalid'
     })
   );
@@ -32,14 +33,30 @@ module.exports = app => {
   app.get(
     '/auth/twitter/callback',
     passport.authenticate('twitter', {
-      successRedirect: '/',
+      successRedirect: '/dashboard',
       failureRedirect: '/auth/invalid'
     })
   );
 
+  // RENDER REGISTRATION FORM
+  app.get('/auth/register', (req, res, next) =>
+    res.render('register', { title: 'Registration' })
+  );
+
+  // REGISTER A USER
+  app.post('/auth/register', ValidateUser.test, AuthController.newUser);
+
+  // RENDER LOGIN FORM
+  app.get('/auth/login', (req, res, next) =>
+    res.render('login', { title: 'Login' })
+  );
+
+  // LOGIN
+  app.post('/auth/login', ValidateUser.test, AuthController.LogIn);
+
   // FAILURE REDIRECT
-  // app.get('/auth/invalid', AuthController.invalidLogin);
+  app.get('/auth/invalid', AuthController.invalidLogin);
 
   // LOGOUT
-  // app.get('/auth/logout', AuthController.logOut);
+  app.get('/auth/logout', AuthController.logOut);
 };

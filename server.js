@@ -6,6 +6,7 @@ const express = require('express');
 const app = express(); // INITILIZE APP
 const path = require('path');
 const bodyParser = require('body-parser');
+const exphbs = require('express-handlebars');
 
 const http = require('http'); // USED TO CREATE THE HTTP SERVER
 const server = http.createServer(app); // CREATE HTTP SERVER USING APP
@@ -43,7 +44,8 @@ const auth = require('./routes/authRoutes');
 // VIEW ENGINE SETUP
 
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
 
 // =============================================================
 // EXPRESS FLASH MIDDLEWARE
@@ -121,6 +123,10 @@ app.disable('x-powered-by');
 // USE ROUTES
 
 auth(app);
+
+app.get('/', (req, res, next) => {
+  res.render('home', { title: 'Index' });
+});
 
 // =============================================================
 // START SERVER
