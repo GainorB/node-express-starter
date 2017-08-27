@@ -13,15 +13,24 @@ module.exports = {
     // USE MODEL TO REGISTER A NEW USER
     User.addUser(newUser)
       .then(user => {
+        // CREATE A TOKEN
+        const token = jwt.sign(user, process.env.SECRET_KEY, {
+          expiresIn: 604800 // 1 WEEK
+        });
+
         res.status(201).json({
           success: true,
           message: 'User registered',
+          token: 'JWT ' + token,
           user: {
             id: user.id,
             username: user.username,
             email: user.email
           }
         });
+
+        // STORE TOKEN WHEN REGISTERING IN
+        User.storeJWToken(token, user.id);
       })
       .catch(err =>
         res.json({ status: false, msg: 'Error registering user', err })
@@ -61,6 +70,9 @@ module.exports = {
               email: user.email
             }
           });
+
+          // STORE TOKEN WHEN LOGGIN IN
+          User.storeJWToken(token, user.id);
         } else {
           return res
             .status(401)
