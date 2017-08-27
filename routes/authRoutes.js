@@ -15,7 +15,7 @@ module.exports = app => {
   app.get(
     '/google/oauth2callback',
     passport.authenticate('google', {
-      successRedirect: '/dashboard',
+      successRedirect: '/auth/dashboard',
       failureRedirect: '/auth/invalid'
     })
   );
@@ -24,7 +24,7 @@ module.exports = app => {
   app.get(
     '/auth/facebook/callback',
     passport.authenticate('facebook', {
-      successRedirect: '/dashboard',
+      successRedirect: '/auth/dashboard',
       failureRedirect: '/auth/invalid'
     })
   );
@@ -33,13 +33,13 @@ module.exports = app => {
   app.get(
     '/auth/twitter/callback',
     passport.authenticate('twitter', {
-      successRedirect: '/dashboard',
+      successRedirect: '/auth/dashboard',
       failureRedirect: '/auth/invalid'
     })
   );
 
   // RENDER REGISTRATION FORM
-  app.get('/auth/register', (req, res, next) =>
+  app.get('/auth/register', ValidateUser.isLoggedIn, (req, res, next) =>
     res.render('register', { title: 'Registration' })
   );
 
@@ -47,12 +47,27 @@ module.exports = app => {
   app.post('/auth/register', ValidateUser.test, AuthController.newUser);
 
   // RENDER LOGIN FORM
-  app.get('/auth/login', (req, res, next) =>
+  app.get('/auth/login', ValidateUser.isLoggedIn, (req, res, next) =>
     res.render('login', { title: 'Login' })
   );
 
-  // LOGIN
-  app.post('/auth/login', ValidateUser.test, AuthController.LogIn);
+  // LOCAL LOGIN
+  app.post(
+    '/auth/login',
+    passport.authenticate('local', {
+      session: true,
+      successRedirect: '/auth/dashboard',
+      failureRedirect: '/auth/login',
+      failureFlash: true
+    })
+  );
+
+  // DASHBOARD
+  app.get(
+    '/auth/dashboard',
+    ValidateUser.isAuthenticated,
+    AuthController.dashboard
+  );
 
   // FAILURE REDIRECT
   app.get('/auth/invalid', AuthController.invalidLogin);

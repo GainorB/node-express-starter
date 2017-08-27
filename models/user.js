@@ -8,7 +8,7 @@ User.findByUserName = userName => {
   return db.oneOrNone('SELECT * FROM users WHERE username = $1', userName);
 };
 
-// LOCAL LOGIN: STORE JWT TOKEN
+// LOCAL LOGIN/REGISTER: STORE JWT TOKEN
 User.storeJWToken = (token, userID) => {
   return db.none('UPDATE users SET jwttoken = $1 WHERE id = $2', [
     token,
@@ -18,9 +18,9 @@ User.storeJWToken = (token, userID) => {
 
 // FIND USER BY ID
 User.findById = (id, callback) => {
-  return db.oneOrNone('SELECT * FROM users WHERE id = $1', id).then(user => {
-    callback(null, user);
-  });
+  return db
+    .oneOrNone('SELECT * FROM users WHERE id = $1', id)
+    .then(user => callback(null, user));
 };
 
 // CREATE A LOCAL USER

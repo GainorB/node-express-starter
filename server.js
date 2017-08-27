@@ -126,6 +126,7 @@ auth(app);
 
 app.get('/', (req, res, next) => {
   res.render('home', { title: 'Index' });
+  // res.redirect('/auth/login');
 });
 
 // =============================================================

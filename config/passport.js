@@ -3,11 +3,9 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
+const LocalStrategy = require('passport-local').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('../models/user');
-
-// JWT
-let opts = {};
 
 module.exports = passport => {
   // WHEN YOU LOG IN, INITIALIZE SESSION
@@ -23,6 +21,7 @@ module.exports = passport => {
   });
 
   // JWT
+  let opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt');
   opts.secretOrKey = process.env.SECRET_KEY;
   passport.use(
@@ -39,6 +38,37 @@ module.exports = passport => {
         }
       });
     })
+  );
+
+  // LOCAL LOGIN
+  passport.use(
+    new LocalStrategy(
+      { passReqToCallback: true },
+      (req, username, password, done) => {
+        User.findByUserName(username)
+          .then(user => {
+            if (!user) {
+              req.flash('error', 'User not found');
+              return done(null, false);
+            }
+
+            User.comparePassword(password, user.password, (err, isMatch) => {
+              if (err) throw err;
+
+              if (isMatch) {
+                return done(null, user);
+              } else {
+                req.flash('error', 'Password is inccorect.');
+                return done(null, false);
+              }
+            });
+          })
+          .catch(err => {
+            req.flash('error', 'Authentication failed');
+            return done(err);
+          });
+      }
+    )
   );
 
   // FACEBOOK LOGIN

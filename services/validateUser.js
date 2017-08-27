@@ -28,7 +28,7 @@ Validate.test = (req, res, next) => {
 
   // IF THE ROUTE MATCHES THIS, IT MEANS A NEW USER IS TRYING TO REGISTER
   // CHECK IF EMAIL IS PROVIDED THEN CHECK THE FORMAT OF EMAIL
-  if (req.route.path === '/users/new') {
+  if (req.route.path === '/auth/register') {
     // CHECK IF EMAIL IS VALID (NOT EMPTY)
     if (!email) {
       return res.status(422).json({
@@ -51,6 +51,18 @@ Validate.test = (req, res, next) => {
   }
 
   return next();
+};
+
+// CHECK IF USER IS AUTHENTICATED
+Validate.isAuthenticated = (req, res, next) => {
+  if (!req.user) return res.redirect('/auth/login');
+  next();
+};
+
+// CHECK IF USER IS LOGGED IN
+Validate.isLoggedIn = (req, res, next) => {
+  if (req.user) return res.redirect('/auth/dashboard');
+  next();
 };
 
 module.exports = Validate;
