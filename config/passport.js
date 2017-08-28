@@ -6,6 +6,7 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 
 module.exports = passport => {
   // WHEN YOU LOG IN, INITIALIZE SESSION
@@ -56,9 +57,17 @@ module.exports = passport => {
               if (err) throw err;
 
               if (isMatch) {
+                // CREATE A TOKEN
+                user.jwttoken = '';
+                const token = jwt.sign(user, process.env.SECRET_KEY, {
+                  expiresIn: 604800 // 1 WEEK
+                });
+
+                // STORE TOKEN WHEN REGISTERING IN
+                User.storeJWToken(token, user.id);
                 return done(null, user);
               } else {
-                req.flash('error', 'Password is inccorect.');
+                req.flash('error', 'Password is incorrect');
                 return done(null, false);
               }
             });
@@ -95,6 +104,13 @@ module.exports = passport => {
 
             // IF ACCOUNT ALREADY EXISTS
             if (existingUser) {
+              existingUser.jwttoken = '';
+              const jtoken = jwt.sign(existingUser, process.env.SECRET_KEY, {
+                expiresIn: 604800 // 1 WEEK
+              });
+
+              User.storeJWToken(jtoken, existingUser.id);
+
               req.flash(
                 'info',
                 'Facebook account already linked, automatically logged in with facebook.'
@@ -106,11 +122,14 @@ module.exports = passport => {
                 id: profile.id,
                 token: accessToken,
                 email: profile.emails[0].value,
-                name: profile.name.givenName + ' ' + profile.name.familyName
+                name: `${profile.name.givenName} ${profile.name.familyName}`
               };
 
+              const jtoken = jwt.sign(NewUser, process.env.SECRET_KEY, {
+                expiresIn: 604800 // 1 WEEK
+              });
               // CREATE A NEW USER USING USER MODEL
-              User.create(NewUser).then(user => {
+              User.createOAuthUser(NewUser, jtoken).then(user => {
                 req.flash('success', 'Facebook account linked.');
                 // RETURNS THE NEW USER THAT WAS CREATED
                 return done(null, user);
@@ -139,6 +158,13 @@ module.exports = passport => {
 
             // IF ACCOUNT ALREADY EXISTS
             if (existingUser) {
+              existingUser.jwttoken = '';
+              const jtoken = jwt.sign(existingUser, process.env.SECRET_KEY, {
+                expiresIn: 604800 // 1 WEEK
+              });
+
+              User.storeJWToken(jtoken, existingUser.id);
+
               req.flash(
                 'info',
                 'Twitter account already linked, automatically logged in with twitter.'
@@ -153,8 +179,13 @@ module.exports = passport => {
                 name: profile.username
               };
 
+              // CREATE A TOKEN
+              const jtoken = jwt.sign(NewUser, process.env.SECRET_KEY, {
+                expiresIn: 604800 // 1 WEEK
+              });
+
               // CREATE A NEW USER USING USER MODEL
-              User.create(NewUser).then(user => {
+              User.createOAuthUser(NewUser, jtoken).then(user => {
                 req.flash('success', 'Twitter account linked.');
                 // RETURNS THE NEW USER THAT WAS CREATED
                 return done(null, user);
@@ -182,6 +213,13 @@ module.exports = passport => {
 
             // IF ACCOUNT ALREADY EXISTS
             if (existingUser) {
+              existingUser.jwttoken = '';
+              const jtoken = jwt.sign(existingUser, process.env.SECRET_KEY, {
+                expiresIn: 604800 // 1 WEEK
+              });
+
+              User.storeJWToken(jtoken, existingUser.id);
+
               req.flash(
                 'info',
                 'Google account already linked, automatically logged in with google.'
@@ -193,11 +231,16 @@ module.exports = passport => {
                 id: profile.id,
                 token: accessToken,
                 email: profile.emails[0].value,
-                name: profile.name.givenName + ' ' + profile.name.familyName
+                name: `${profile.name.givenName} ${profile.name.familyName}`
               };
 
+              // CREATE A TOKEN
+              const jtoken = jwt.sign(NewUser, process.env.SECRET_KEY, {
+                expiresIn: 604800 // 1 WEEK
+              });
+
               // CREATE A NEW USER USING USER MODEL
-              User.create(NewUser).then(user => {
+              User.createOAuthUser(NewUser, jtoken).then(user => {
                 req.flash('success', 'Google account linked.');
                 // RETURNS THE NEW USER THAT WAS CREATED
                 return cb(null, user);

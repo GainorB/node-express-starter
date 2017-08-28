@@ -4,15 +4,13 @@ CREATE DATABASE express_starter_app;
 \c express_starter_app;
 
 CREATE TABLE IF NOT EXISTS users(
-    id BIGSERIAL PRIMARY KEY NOT NULL,
+    id NUMERIC PRIMARY KEY NOT NULL,
     username VARCHAR(30),
-    name VARCHAR(50), -- holds name from FB, Twitter or Google token
-    password VARCHAR(100) NOT NULL,
+    name VARCHAR(50), -- holds name from FB, Twitter or Google
+    password VARCHAR(100),
     email VARCHAR(50) NOT NULL,
-    FaceBookToken TEXT, -- holds facebook token
-    TwitterToken TEXT, -- holds twitter token
-    GoogleToken TEXT, -- holds google token
-    jwtToken TEXT, -- holds jwt token
+    oauthtoken TEXT, -- holds facebook, twitter, or google token
+    jwttoken TEXT NOT NULL, -- holds jwt token
     registered_on TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 

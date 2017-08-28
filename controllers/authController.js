@@ -3,27 +3,29 @@ const jwt = require('jsonwebtoken');
 
 module.exports = {
   // REGISTER A NEW USER
-  newUser(req, res) {
+  newUser(req, res, next) {
     // EXTRACT FORM DATA
     const { username, email, password } = req.body;
 
     // INSERT USER DATA INTO AN OBJECT
     let newUser = { username, email, password };
 
+    // CREATE A TOKEN
+    const token = jwt.sign(newUser, process.env.SECRET_KEY, {
+      expiresIn: 604800 // 1 WEEK
+    });
+
     // USE MODEL TO REGISTER A NEW USER
-    User.addUser(newUser)
+    User.addUser(newUser, token)
       .then(user => {
-        // CREATE A TOKEN
-        const token = jwt.sign(user, process.env.SECRET_KEY, {
-          expiresIn: 604800 // 1 WEEK
+        req.login(user, err => {
+          if (err) return next(err);
+          req.flash(
+            'success',
+            'You are now registered, check your email for a confirmation email.'
+          );
+          res.redirect('/auth/dashboard');
         });
-
-        req.flash('success', 'You are registered and can now login');
-
-        // STORE TOKEN WHEN REGISTERING IN
-        User.storeJWToken(token, user.id);
-
-        res.redirect('/auth/dashboard');
       })
       .catch(err =>
         res.json({ status: false, msg: 'Error registering user', err })
@@ -32,7 +34,6 @@ module.exports = {
 
   // USER PROFILE
   dashboard(req, res) {
-    req.flash('info', 'Summary of your account below');
     res.render('dashboard', { title: 'Dashboard' });
   },
 
