@@ -18,41 +18,33 @@ module.exports = {
           expiresIn: 604800 // 1 WEEK
         });
 
-        res.status(201).json({
-          success: true,
-          message: 'User registered',
-          token: 'JWT ' + token,
-          user: {
-            id: user.id,
-            username: user.username,
-            email: user.email
-          }
-        });
+        req.flash('success', 'You are registered and can now login');
 
         // STORE TOKEN WHEN REGISTERING IN
         User.storeJWToken(token, user.id);
+
+        res.redirect('/auth/dashboard');
       })
       .catch(err =>
         res.json({ status: false, msg: 'Error registering user', err })
       );
   },
 
+  // USER PROFILE
   dashboard(req, res) {
-    res.json({ user: req.user });
+    req.flash('info', 'Summary of your account below');
+    res.render('dashboard', { title: 'Dashboard' });
   },
 
   // USER PROVIDES INVALID LOGIN DETAILS
   invalidLogin(req, res) {
     req.flash('error', 'Invalid credentials');
-    res.status(401).json({
-      status: false,
-      message: 'Please try again'
-    });
+    res.redirect('/auth/login');
   },
 
   // LOGOUT
   logOut(req, res) {
-    req.flash('info', 'You are now logged out');
+    req.flash('success', 'You are now logged out');
     req.logout();
     res.redirect('/');
   }

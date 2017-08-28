@@ -48,14 +48,6 @@ app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
 // =============================================================
-// EXPRESS FLASH MIDDLEWARE
-
-app.use(require('connect-flash')());
-app.use(function(req, res, next) {
-  res.locals.messages = require('express-messages')(req, res);
-  next();
-});
-
 // EXPRESS VALIDATOR MIDDLEWARE
 app.use(
   expressValidator({
@@ -92,6 +84,8 @@ app.use(
 // =============================================================
 // MIDDLEWARE
 
+app.use(flash());
+app.use(require('connect-flash')());
 app.use(logger('dev')); // USE MORGAN
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -120,13 +114,23 @@ app.all('/*', (req, res, next) => {
 app.disable('x-powered-by');
 
 // =============================================================
+// GLOBAL VARIABLES
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  res.locals.info = req.flash('info');
+  res.locals.user = req.user || null;
+  next();
+});
+
+// =============================================================
 // USE ROUTES
 
 auth(app);
 
 app.get('/', (req, res, next) => {
   res.render('home', { title: 'Index' });
-  // res.redirect('/auth/login');
 });
 
 // =============================================================

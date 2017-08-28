@@ -1,3 +1,6 @@
+ {{#if errors}} {{#each errors}}
+<div class="alert alert-danger">{{msg}}</div>
+{{/each}} {{/if}}
 <div class="register-form-outline">
   <h1 class="formHeader">Register an account</h1>
   <form class="container" id="needs-validation" method="POST" action="/auth/register" novalidate>
@@ -26,20 +29,3 @@
     <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button> <button type="reset" class="btn btn-danger btn-lg btn-block">Reset</button>
   </form>
 </div>
-<script>
-  // Example starter JavaScript for disabling form submissions if there are invalid fields
-  (function () {
-    "use strict";
-    window.addEventListener("load", function () {
-      var form = document.getElementById("needs-validation");
-      form.addEventListener("submit", function (event) {
-        if (form.checkValidity() == false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add("was-validated");
-      }, false);
-    }, false);
-  }());
-
-</script>

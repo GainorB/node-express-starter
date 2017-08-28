@@ -43,7 +43,7 @@ module.exports = app => {
     res.render('register', { title: 'Registration' })
   );
 
-  // REGISTER A USER
+  // LOCAL REGISTRATION
   app.post('/auth/register', ValidateUser.test, AuthController.newUser);
 
   // RENDER LOGIN FORM

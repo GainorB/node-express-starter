@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
     crossorigin="anonymous">
   <link rel="stylesheet" href="/css/style.css">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
     crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.1.1/bootstrap-social.css">
@@ -16,7 +16,29 @@
 </head>
 
 <body>
-  {{{body}}}
+  <nav>
+    <ul>
+      {{#if user}}
+      <li><a href="/" class="btn btn-secondary btn-sm">Home</a></li>
+      <li><a href="/auth/dashboard" class="btn btn-info btn-sm">Dashboard</a></li>
+      <li><a href="/auth/logout" class="btn btn-danger btn-sm">Logout</a></li>
+      {{else}}
+      <li><a href="/" class="btn btn-secondary btn-sm">Home</a></li>
+      <li><a href="/auth/login" class="btn btn-primary btn-sm">Login</a></li>
+      <li><a href="/auth/register" class="btn btn-success btn-sm">Register</a></li>
+      {{/if}}
+    </ul>
+  </nav>
+
+  <div class="flash-msg">
+    {{#if success}}
+    <div class="alert alert-success">{{success}}</div>
+    {{/if}} {{#if error}}
+    <div class="alert alert-danger">{{error}}</div>
+    {{/if}} {{#if info}}
+    <div class="alert alert-info">{{info}}</div>
+    {{/if}}
+  </div> {{{body}}}
 </body>
 
 </html>

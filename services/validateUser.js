@@ -6,48 +6,23 @@ Validate.test = (req, res, next) => {
   // EXTRACT FORM DATA
   const { username, email, password } = req.body;
 
-  // CHECK IF USERNAME IS VALID (NOT EMPTY)
-  if (!username) {
-    return res.status(422).json({
-      success: false,
-      message: 'Username is required'
-    });
+  // CHECK FOR ERRORS
+  req.checkBody('username', 'Username is required.').notEmpty();
+  req.checkBody('password', 'Password is required.').notEmpty();
+  req.checkBody('email', 'Email is required.').isEmail();
 
-    next();
+  // VALIDATION ERRORS
+  let errors = req.validationErrors();
+
+  if (errors) {
+    res.render('register', { errors, title: 'Registration' });
   }
 
-  // CHECK IF PASSWORD IS VALID (NOT EMPTY)
-  if (!password) {
-    return res.status(422).json({
-      success: false,
-      message: 'Password is required'
-    });
+  // CHECK EMAIL IF IT IS FORMATTED CORRECTLY
+  if (!User.validateEmail(email)) {
+    return req.flash('error', "Email isn't formatted correctly");
 
     next();
-  }
-
-  // IF THE ROUTE MATCHES THIS, IT MEANS A NEW USER IS TRYING TO REGISTER
-  // CHECK IF EMAIL IS PROVIDED THEN CHECK THE FORMAT OF EMAIL
-  if (req.route.path === '/auth/register') {
-    // CHECK IF EMAIL IS VALID (NOT EMPTY)
-    if (!email) {
-      return res.status(422).json({
-        success: false,
-        message: 'Email is required'
-      });
-
-      next();
-    }
-
-    // CHECK EMAIL IF IT IS FORMATTED CORRECTLY
-    if (!User.validateEmail(email)) {
-      return res.status(422).json({
-        success: false,
-        message: 'Please use a valid email'
-      });
-
-      next();
-    }
   }
 
   return next();

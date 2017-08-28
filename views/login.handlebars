@@ -1,5 +1,5 @@
 <div class="register-form-outline">
-  <h1 class="formHeader">Login</h1>
+  <h1 class="formHeader">Access account</h1>
   <form class="container" id="needs-validation" method="POST" action="/auth/login" novalidate>
     <div class="form-group">
       <label for="username">Username</label>
@@ -31,20 +31,3 @@
     <span class="fa fa-google"></span> Sign in with Google
   </a>
 </div>
-<script>
-  // Example starter JavaScript for disabling form submissions if there are invalid fields
-  (function () {
-    "use strict";
-    window.addEventListener("load", function () {
-      var form = document.getElementById("needs-validation");
-      form.addEventListener("submit", function (event) {
-        if (form.checkValidity() == false) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        form.classList.add("was-validated");
-      }, false);
-    }, false);
-  }());
-
-</script>
